@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/juntai?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+
+
+server:
+  port: 8089
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+qiniu:
+  accessKey: ddKlbFgBEfjqkM_cqR6lJjm3f43hfKYfMU0i3MKh
+  secretKey: xHfpa4tVKjnEhGltIYRJfnT_Sk82jUMrQYl_gRqx
+  bucketName: znsxv
+  path: rfzhrumxc.hn-bkt.clouddn.com

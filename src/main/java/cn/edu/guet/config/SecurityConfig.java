@@ -59,12 +59,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 跨域预检请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/").permitAll()
+                .antMatchers("/Index").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/wx/*").permitAll()
                 .antMatchers("/api/upload/*").permitAll()
                 .antMatchers("/api/product/wx/*").permitAll()
                 .antMatchers("/api/image/*").permitAll()
                 .antMatchers("/wx/order/*").permitAll()
+                .antMatchers("/api/order/detailDayList/*").permitAll()
                 // 其他所有请求需要身份认证
                 .anyRequest().authenticated();
         http.headers().frameOptions().disable();

@@ -8,6 +8,7 @@ import cn.edu.guet.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -20,6 +21,7 @@ public class ImageController {
     //新增
     @PostMapping
     public HttpResult add(@RequestBody Image image) {
+        image.setCreateTime(new Date());
         if (imageService.save(image)) {
             return ResultUtils.success("新增轮播图成功");
         } else {
@@ -48,6 +50,7 @@ public class ImageController {
     //编辑
     @PutMapping
     public HttpResult edit(@RequestBody Image image) {
+        image.setLastUpdateTime(new Date());
         if (imageService.updateById(image)) {
             return ResultUtils.success("编辑轮播图成功");
         } else {

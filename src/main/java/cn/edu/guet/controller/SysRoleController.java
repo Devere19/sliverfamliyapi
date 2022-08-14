@@ -4,6 +4,7 @@ import cn.edu.guet.bean.*;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.RoleMenuService;
+import cn.edu.guet.service.SysMenuService;
 import cn.edu.guet.service.SysRoleService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +32,9 @@ public class SysRoleController {
     @Autowired
     private RoleMenuService roleMenuService;
 
+    @Autowired
+    private SysMenuService sysMenuService;
+
     @PreAuthorize("hasAuthority('sys:role:view')")
     @GetMapping(value = "/findAll")
     public HttpResult findAll() {
@@ -39,7 +44,7 @@ public class SysRoleController {
     //新增
     @PostMapping
     public HttpResult add(@RequestBody SysRole sysRole) {
-        // sysRole.setCreateTime(new Date());
+        sysRole.setCreateTime(new Date());
         if (sysRoleService.save(sysRole)) {
             return ResultUtils.success("新增角色成功");
         } else {
@@ -50,7 +55,7 @@ public class SysRoleController {
     //编辑
     @PutMapping
     public HttpResult edit(@RequestBody SysRole sysRole) {
-        // sysRole.setLastUpdateTime(new Date());
+        sysRole.setLastUpdateTime(new Date());
         if (sysRoleService.updateById(sysRole)) {
             return ResultUtils.success("编辑角色成功");
         } else {

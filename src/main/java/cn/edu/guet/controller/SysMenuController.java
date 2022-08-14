@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class SysMenuController {
     //新增
     @PostMapping
     public HttpResult add(@RequestBody SysMenu sysMenu) {
-        // sysMenu.setCreateTime(new Date());
+        sysMenu.setCreateTime(new Date());
         if (sysMenuService.save(sysMenu)) {
             return ResultUtils.success("新增成功!");
         }
@@ -47,7 +48,7 @@ public class SysMenuController {
     //编辑
     @PutMapping
     public HttpResult edit(@RequestBody SysMenu sysMenu) {
-        // sysMenu.setLastUpdateTime(new Date());
+        sysMenu.setLastUpdateTime(new Date());
         if (sysMenuService.updateById(sysMenu)) {
             return ResultUtils.success("编辑成功!");
         }

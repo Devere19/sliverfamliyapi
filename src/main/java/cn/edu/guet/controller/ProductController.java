@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -31,6 +32,7 @@ public class ProductController {
 
     @PostMapping
     public HttpResult addProduct(@RequestBody Product product) {
+        product.setCreateTime(new Date());
         System.out.println(product);
         if (productService.save(product)) {
             return ResultUtils.success("新增商品成功");
@@ -41,6 +43,7 @@ public class ProductController {
 
     @PutMapping
     public HttpResult editProduct(@RequestBody Product product){
+        product.setLastUpdateTime(new Date());
         if(productService.updateById(product)){
             return ResultUtils.success("编辑商品成功");
         }else {

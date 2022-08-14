@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("api/member")
 public class UserController {
@@ -33,6 +35,7 @@ public class UserController {
     //编辑
     @PutMapping
     public HttpResult edit(@RequestBody User user) {
+        user.setLastUpdateTime(new Date());
         if (userService.updateById(user)) {
             return ResultUtils.success("编辑角色成功");
         } else {
@@ -43,6 +46,7 @@ public class UserController {
     //新增
     @PostMapping
     public HttpResult add(@RequestBody User user) {
+        user.setCreateTime(new Date());
         if (userService.save(user)) {
             return ResultUtils.success("新增角色成功");
         } else {

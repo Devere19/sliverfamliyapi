@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -144,5 +146,45 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         QueryWrapper<OrderDetail> query = new QueryWrapper<>();
         query.lambda().eq(OrderDetail::getOrderDetailTrace,orderTrace);
         return orderDetailService.list(query);
+    }
+
+    @Override
+    public List<Order> getDetailDayList(String createTime) {
+        //判断是每天的销售还是每月的销售
+        //当0的时候是查询今日的销售数据
+        //当1的时候是查询每周的销售
+        //当2的时候是查询没月的销售
+        String preDay=null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c= Calendar.getInstance();;
+        Date time;
+        if(createTime.equals("0")){
+            c.add(Calendar.DATE, -1);
+            time = c.getTime();
+            preDay = sdf.format(time);
+        }else if(createTime.equals("1")){
+            c.add(Calendar.DATE, -7);
+            time = c.getTime();
+            preDay = sdf.format(time);
+        }else if(createTime.equals("2")){
+            c.add(Calendar.MONTH, -1);
+            time = c.getTime();
+            preDay = sdf.format(time);
+        }
+
+        List<Order> list = null;
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().lt(Order::getCreateTime, new Date()).ge(Order::getCreateTime, preDay);
+        list = this.baseMapper.selectList(queryWrapper);
+        List<Product> productList= productService.list();
+        for (Order order : list) {
+            List<OrderDetail> detailList = getDetailProductList(order.getOrderTrace());
+            order.setOrderDetails(detailList);
+            order.setProduct(productList);
+        }
+        //对查询到的订单进行处理
+
+
+        return list;
     }
 }

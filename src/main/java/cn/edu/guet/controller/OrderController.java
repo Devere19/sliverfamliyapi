@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +33,7 @@ public class OrderController {
     //编辑
     @PutMapping
     public HttpResult edit(@RequestBody Order order){
+        order.setLastUpdateTime(new Date());
         if(orderService.updateById(order)){
             return ResultUtils.success("编辑成功");
         }
@@ -59,5 +61,12 @@ public class OrderController {
         List<OrderDetail> list = orderService.getDetailList(orderTrace);
         return ResultUtils.success("查询成功",list);
     }
+    //根据时间查询订单，再根据订单号查询订单详情
+    @GetMapping("/detailDayList/{orderCreateTime}")
+    public HttpResult getDetailDayList(@PathVariable("orderCreateTime") String orderCreateTime){
+        List<Order> list = orderService.getDetailDayList(orderCreateTime);
+        return ResultUtils.success("查询成功",list);
+    }
+
 
 }

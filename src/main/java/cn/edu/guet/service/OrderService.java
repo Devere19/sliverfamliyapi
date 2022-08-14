@@ -35,4 +35,6 @@ public interface OrderService extends IService<Order> {
     List<Order> findOrder(String orderPhone);
 
     List<OrderDetail> getDetailProductList(String orderTrace);
+    //根据日期拿到所有的订单
+    List<Order> getDetailDayList(String createTime);
 }

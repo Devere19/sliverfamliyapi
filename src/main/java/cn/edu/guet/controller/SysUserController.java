@@ -7,14 +7,15 @@ import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.SysUserRoleService;
 import cn.edu.guet.service.SysUserService;
+import cn.edu.guet.util.PasswordUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * 用户控制器
@@ -45,7 +46,11 @@ public class SysUserController {
         // sysUser.setCreateTime(new Date());
         System.out.println("新增用户");
          if (StringUtils.isNotEmpty(sysUser.getPassword())) {
-             sysUser.setPassword(DigestUtils.md5DigestAsHex(sysUser.getPassword().getBytes()));
+             String salt = PasswordUtils.getSalt();
+             String encode = PasswordUtils.encode(sysUser.getPassword(), salt);
+             sysUser.setPassword(encode);
+             sysUser.setSalt(salt);
+             sysUser.setCreateTime(new Date());
          }
          //判断该用户是否存在
          QueryWrapper<SysUser> query = new QueryWrapper<>();
@@ -63,7 +68,7 @@ public class SysUserController {
     //编辑
     @PutMapping
     public HttpResult edit(@RequestBody SysUser sysUser) {
-        // sysUser.setLastUpdateTime(new Date());
+        sysUser.setLastUpdateTime(new Date());
         // if (StringUtils.isNotEmpty(sysUser.getPassword())) {
         //     sysUser.setPassword(DigestUtils.md5DigestAsHex(sysUser.getPassword().getBytes()));
         // }
@@ -112,6 +117,15 @@ public class SysUserController {
         SysUserRole one = sysUserRoleService.getOne(query);
 
         return ResultUtils.success("查询成功", one);
+    }
+
+    //通过username获取user信息
+    @GetMapping("/nickName/{name}")
+    public HttpResult getNickName(@PathVariable("name") String name){
+        System.out.println("需要的username是："+name);
+        QueryWrapper<SysUser> query = new QueryWrapper<>();
+        query.lambda().eq(SysUser::getName,name);
+        return ResultUtils.success("查询成功",sysUserService.getOne(query));
     }
 
 }

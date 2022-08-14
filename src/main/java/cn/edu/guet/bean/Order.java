@@ -42,5 +42,8 @@ public class Order {
     @TableField(exist = false)
     private List<Product> product;
 
+    @TableField(exist = false)
+    private String productType;
+
 
 }
